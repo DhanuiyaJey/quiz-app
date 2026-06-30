@@ -15,57 +15,62 @@ let timeLeft = 10;
 let timer;
 let playerName = "";
 
+/* ✅ ONLY ONE CLICK HANDLER */
 startButton.addEventListener("click", () => {
     playerName = playerNameInput.value.trim();
-    if (playerName === "") {
+
+    if (!playerName) {
         alert("Please enter your name to start the quiz.");
+        playerNameInput.focus();
         return;
     }
+
     startScreen.style.display = "none";
     container.style.display = "block";
+
     startQuiz();
 });
 
-// Start quiz
+/* START QUIZ */
 function startQuiz() {
     currentQuestionIndex = 0;
     score = 0;
+
+    document.getElementById("leaderboard-container").style.display = "none";
+
     nextButton.innerHTML = "Next";
     nextButton.onclick = null;
+
     showQuestion();
 }
 
-// Show question
+/* SHOW QUESTION */
 function showQuestion() {
     resetState();
 
-    let currentQuestion = questions[currentQuestionIndex];
-    questionElement.innerText = currentQuestion.question;
+    let current = questions[currentQuestionIndex];
 
+    questionElement.innerText = current.question;
     questionNumber.innerText = `Question ${currentQuestionIndex + 1} of ${questions.length}`;
 
-    // Progress bar
-    let progress = ((currentQuestionIndex +1 ) / questions.length) * 100;
+    let progress = ((currentQuestionIndex + 1) / questions.length) * 100;
     progressBar.style.width = progress + "%";
 
-    // Create answer buttons
-    currentQuestion.answers.forEach(answer => {
-        const button = document.createElement("button");
-        button.innerText = answer.text;
-        button.classList.add("btn");
-        answerButtons.appendChild(button);
+    current.answers.forEach(ans => {
+        const btn = document.createElement("button");
+        btn.innerText = ans.text;
+        btn.classList.add("btn");
 
-        if (answer.correct) {
-            button.dataset.correct = true;
-        }
+        if (ans.correct) btn.dataset.correct = true;
 
-        button.addEventListener("click", selectAnswer);
+        btn.addEventListener("click", selectAnswer);
+        answerButtons.appendChild(btn);
     });
 
     startTimer();
 }
 
-// Reset
+/* RESET */
 function resetState() {
     nextButton.style.display = "none";
     answerButtons.innerHTML = "";
@@ -74,32 +79,31 @@ function resetState() {
     timerElement.innerText = timeLeft;
 }
 
-// Select answer
+/* ANSWER */
 function selectAnswer(e) {
-    const selectedBtn = e.target;
-    const isCorrect = selectedBtn.dataset.correct === "true";
+    const btn = e.target;
+    const correct = btn.dataset.correct === "true";
 
-    if (isCorrect) {
-        selectedBtn.style.background = "green";
+    if (correct) {
+        btn.style.background = "green";
         score++;
     } else {
-        selectedBtn.style.background = "red";
+        btn.style.background = "red";
     }
 
-    Array.from(answerButtons.children).forEach(button => {
-        button.disabled = true;
-        if (button.dataset.correct === "true") {
-            button.style.background = "green";
-        }
+    Array.from(answerButtons.children).forEach(b => {
+        b.disabled = true;
+        if (b.dataset.correct === "true") b.style.background = "green";
     });
 
     nextButton.style.display = "block";
     clearInterval(timer);
 }
 
-// Next button
+/* NEXT */
 nextButton.addEventListener("click", () => {
     currentQuestionIndex++;
+
     if (currentQuestionIndex < questions.length) {
         showQuestion();
     } else {
@@ -107,50 +111,71 @@ nextButton.addEventListener("click", () => {
     }
 });
 
-// Show result
+/* RESULT */
 function showResult() {
     resetState();
 
     let percentage = Math.round((score / questions.length) * 100);
 
-    let message = "";
+    questionElement.innerHTML = `
+        <h2>🎉 ${playerName}</h2>
+        <p>You scored <b>${score}/${questions.length}</b></p>
+        <p>${percentage}%</p>
+    `;
 
-    if (percentage >= 80) {
-        message = "🏆 Excellent!";
-    } else if (percentage >= 50) {
-        message = "👍 Good Job!";
-    } else {
-        message = "📚 Try Again!";
-    }
+    document.getElementById("leaderboard-container").style.display = "block";
 
-   questionElement.innerHTML = `<h2>🎉 Congratulations, ${playerName}!</h2>
-                    <p>${message}</p>
-                    <p>You scored <b>${score}/${questions.length}</b></p>
-                    <p>${percentage}%</p>
-        `;
-    // save high score
-    let highScore = localStorage.getItem("highScore") || 0;
-    if (score > highScore) {
-        localStorage.setItem("highScore", score);
-    }
+    saveScore(playerName, score);
+    displayLeaderboard();
 
-    nextButton.innerHTML = "Restart Quiz";
+    nextButton.innerText = "Restart Quiz";
     nextButton.style.display = "block";
-
     nextButton.onclick = () => startQuiz();
 }
 
-// Timer
+/* LEADERBOARD */
+function saveScore(name, score) {
+    let data = JSON.parse(localStorage.getItem("leaderboard")) || [];
+
+    data.push({ name, score });
+
+    data.sort((a, b) => b.score - a.score);
+
+    data = data.slice(0, 5);
+
+    localStorage.setItem("leaderboard", JSON.stringify(data));
+}
+
+function displayLeaderboard() {
+    const list = document.getElementById("leaderboard");
+    list.innerHTML = "";
+
+    let data = JSON.parse(localStorage.getItem("leaderboard")) || [];
+
+    if (data.length === 0) {
+        list.innerHTML = "<li>No scores yet</li>";
+        return;
+    }
+
+    data.forEach((item, i) => {
+        list.innerHTML += `
+            <li>
+                ${i === 0 ? "🥇" : i === 1 ? "🥈" : i === 2 ? "🥉" : "⭐"}
+                ${item.name} - ${item.score}
+            </li>
+        `;
+    });
+}
+
+/* TIMER */
 function startTimer() {
     timeLeft = 10;
     timerElement.innerText = timeLeft;
-    timerElement.classList.remove("warning");
 
     timer = setInterval(() => {
         timeLeft--;
         timerElement.innerText = timeLeft;
 
-        // 🔥 LAST 3 SECONDS EFFECT
         if (timeLeft <= 3) {
             timerElement.classList.add("warning");
         } else {
@@ -159,25 +184,18 @@ function startTimer() {
 
         if (timeLeft === 0) {
             clearInterval(timer);
-            timerElement.classList.remove("warning");
             autoNext();
         }
     }, 1000);
 }
 
-// Auto next when time ends
+/* AUTO NEXT */
 function autoNext() {
     currentQuestionIndex++;
+
     if (currentQuestionIndex < questions.length) {
         showQuestion();
     } else {
         showResult();
     }
 }
-
-// Start first time
-startButton.addEventListener("click", () => {
-    startScreen.style.display = "none";
-    container.style.display = "block";
-    startQuiz();
-});
