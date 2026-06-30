@@ -4,6 +4,9 @@ const nextButton = document.getElementById("next-btn");
 const progressBar = document.getElementById("progress-bar");
 const questionNumber = document.getElementById("question-number");
 const timerElement = document.getElementById("time");
+const startScreen = document.getElementById("start-screen");
+const startButton = document.getElementById("start-btn");
+const container = document.querySelector(".container");
 
 let currentQuestionIndex = 0;
 let score = 0;
@@ -124,4 +127,8 @@ function autoNext() {
 }
 
 // Start first time
-startQuiz();
+startButton.addEventListener("click", () => {
+    startScreen.style.display = "none";
+    container.style.display = "block";
+    startQuiz();
+});
