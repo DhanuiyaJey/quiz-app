@@ -7,17 +7,31 @@ const timerElement = document.getElementById("time");
 const startScreen = document.getElementById("start-screen");
 const startButton = document.getElementById("start-btn");
 const container = document.querySelector(".container");
+const playerNameInput = document.getElementById("player-name");
 
 let currentQuestionIndex = 0;
 let score = 0;
 let timeLeft = 10;
 let timer;
+let playerName = "";
+
+startButton.addEventListener("click", () => {
+    playerName = playerNameInput.value.trim();
+    if (playerName === "") {
+        alert("Please enter your name to start the quiz.");
+        return;
+    }
+    startScreen.style.display = "none";
+    container.style.display = "block";
+    startQuiz();
+});
 
 // Start quiz
 function startQuiz() {
     currentQuestionIndex = 0;
     score = 0;
     nextButton.innerHTML = "Next";
+    nextButton.onclick = null;
     showQuestion();
 }
 
@@ -56,7 +70,7 @@ function resetState() {
     nextButton.style.display = "none";
     answerButtons.innerHTML = "";
     clearInterval(timer);
-    timeLeft = 15;
+    timeLeft = 10;
     timerElement.innerText = timeLeft;
 }
 
@@ -109,13 +123,11 @@ function showResult() {
         message = "📚 Try Again!";
     }
 
-    questionElement.innerHTML = `
-        ${message}<br><br>
-        You scored <b>${score} / ${questions.length}</b><br>
-        (${percentage}%)
-
-    `;
-
+   questionElement.innerHTML = `<h2>🎉 Congratulations, ${playerName}!</h2>
+                    <p>${message}</p>
+                    <p>You scored <b>${score}/${questions.length}</b></p>
+                    <p>${percentage}%</p>
+        `;
     // save high score
     let highScore = localStorage.getItem("highScore") || 0;
     if (score > highScore) {
@@ -125,7 +137,7 @@ function showResult() {
     nextButton.innerHTML = "Restart Quiz";
     nextButton.style.display = "block";
 
-    nextButton.onclick = () => location.reload();
+    nextButton.onclick = () => startQuiz();
 }
 
 // Timer

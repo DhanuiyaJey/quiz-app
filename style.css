@@ -143,3 +143,13 @@ body {
     font-weight: bold;
     animation: blink 0.5s infinite;
 }
+
+#player-name {
+    width: 100%;
+    padding: 12px;
+    margin-top: 15px;
+    margin-bottom: 20px;
+    border:none;
+    border-radius: 8px;
+    font-size: 16px;
+}
