@@ -10,7 +10,7 @@ const container = document.querySelector(".container");
 
 let currentQuestionIndex = 0;
 let score = 0;
-let timeLeft = 15;
+let timeLeft = 10;
 let timer;
 
 // Start quiz
@@ -31,7 +31,7 @@ function showQuestion() {
     questionNumber.innerText = `Question ${currentQuestionIndex + 1} of ${questions.length}`;
 
     // Progress bar
-    let progress = ((currentQuestionIndex) / questions.length) * 100;
+    let progress = ((currentQuestionIndex +1 ) / questions.length) * 100;
     progressBar.style.width = progress + "%";
 
     // Create answer buttons
@@ -102,7 +102,7 @@ function showResult() {
     let message = "";
 
     if (percentage >= 80) {
-        message = "🎉 Excellent!";
+        message = "🏆 Excellent!";
     } else if (percentage >= 50) {
         message = "👍 Good Job!";
     } else {
@@ -112,8 +112,8 @@ function showResult() {
     questionElement.innerHTML = `
         ${message}<br><br>
         You scored <b>${score} / ${questions.length}</b><br>
-        (${percentage}%)<br><br>
-        🏆 Best Score: ${localStorage.getItem("highScore") || 0}
+        (${percentage}%)
+
     `;
 
     // save high score
@@ -130,12 +130,24 @@ function showResult() {
 
 // Timer
 function startTimer() {
+    timeLeft = 10;
+    timerElement.innerText = timeLeft;
+    timerElement.classList.remove("warning");
+
     timer = setInterval(() => {
         timeLeft--;
         timerElement.innerText = timeLeft;
 
+        // 🔥 LAST 3 SECONDS EFFECT
+        if (timeLeft <= 3) {
+            timerElement.classList.add("warning");
+        } else {
+            timerElement.classList.remove("warning");
+        }
+
         if (timeLeft === 0) {
             clearInterval(timer);
+            timerElement.classList.remove("warning");
             autoNext();
         }
     }, 1000);
