@@ -96,11 +96,36 @@ nextButton.addEventListener("click", () => {
 // Show result
 function showResult() {
     resetState();
-    questionElement.innerHTML = `🎉 You scored ${score} out of ${questions.length}`;
-    nextButton.innerHTML = "Restart";
+
+    let percentage = Math.round((score / questions.length) * 100);
+
+    let message = "";
+
+    if (percentage >= 80) {
+        message = "🎉 Excellent!";
+    } else if (percentage >= 50) {
+        message = "👍 Good Job!";
+    } else {
+        message = "📚 Try Again!";
+    }
+
+    questionElement.innerHTML = `
+        ${message}<br><br>
+        You scored <b>${score} / ${questions.length}</b><br>
+        (${percentage}%)<br><br>
+        🏆 Best Score: ${localStorage.getItem("highScore") || 0}
+    `;
+
+    // save high score
+    let highScore = localStorage.getItem("highScore") || 0;
+    if (score > highScore) {
+        localStorage.setItem("highScore", score);
+    }
+
+    nextButton.innerHTML = "Restart Quiz";
     nextButton.style.display = "block";
 
-    nextButton.onclick = startQuiz;
+    nextButton.onclick = () => location.reload();
 }
 
 // Timer
