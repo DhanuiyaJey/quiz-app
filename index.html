@@ -7,50 +7,95 @@
 
     <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
-     <div id="start-screen">
-    <h1>🧠 Quiz App</h1>
-    <p>Click below to start the quiz</p>
-    <input type="text" id="player-name" placeholder="Enter your name" required>
-    <button id="start-btn">Start Quiz</button>
-</div>
 
-<div class="container">
+    <!-- =========================
+         START SCREEN
+    ========================== -->
+    <div id="start-screen">
 
+        <h1>🧠 Quiz App</h1>
+        <p>Test your knowledge with fun quizzes!</p>
 
-    <div class="progress-container">
-        <div id="progress-bar"></div>
+        <input
+            type="text"
+            id="player-name"
+            placeholder="Enter your name"
+        >
+
+        <select id="category">
+            <option value="">Select Category</option>
+            <option value="programming">Programming</option>
+            <option value="math">Math</option>
+            <option value="gk">General Knowledge</option>
+        </select>
+
+        <button id="start-btn">
+            Start Quiz
+        </button>
+
     </div>
 
-    <p id="question-number">
-        Question 1 of 10
-    </p>
+    <!-- =========================
+         QUIZ CONTAINER
+    ========================== -->
 
-    <div class="timer">
-        ⏱ Time Left:
-        <span id="time">15</span>s
+    <div class="container" style="display:none;">
+
+        <!-- Progress Bar -->
+        <div class="progress-container">
+            <div id="progress-bar"></div>
+        </div>
+
+        <!-- Question Number -->
+        <p id="question-number">
+            Question 1 of 10
+        </p>
+
+        <!-- Timer -->
+        <div class="timer">
+            ⏱ Time Left :
+            <span id="time">10</span>s
+        </div>
+
+        <!-- Question -->
+        <h2 id="question">
+            Loading...
+        </h2>
+
+        <!-- Answers -->
+        <div id="answer-buttons">
+
+        </div>
+
+        <!-- Next Button -->
+        <button id="next-btn">
+            Next →
+        </button>
+
     </div>
 
-    <h2 id="question">
-        Loading Question...
-    </h2>
+    <!-- =========================
+         LEADERBOARD
+    ========================== -->
 
-    <div id="answer-buttons"></div>
+    <div id="leaderboard-container" style="display:none;">
 
-    <button id="next-btn">
-        Next →
-    </button>
+        <h2>🏆 Leaderboard</h2>
 
-</div>
+        <ul id="leaderboard">
 
-<div id="leaderboard-container" style="display:none;">
-    <h3>🏆 Leaderboard</h3>
-    <ul id="leaderboard"></ul>
-</div>
+        </ul>
 
-<script src="questions.js"></script>
-<script src="script.js"></script>
+        <button id="home-btn">
+    🏠 Back to Home
+</button>
+
+    </div>
+
+    <!-- JavaScript Files -->
+    <script src="questions.js"></script>
+    <script src="script.js"></script>
 
 </body>
 </html>
