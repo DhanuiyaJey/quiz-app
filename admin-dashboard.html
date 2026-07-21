@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>
+Admin Dashboard - Quiz Master
+</title>
+
+<link rel="stylesheet" href="style.css">
+
+</head>
+
+
+<body>
+
+
+<div class="admin-layout">
+
+
+
+<!-- =====================
+     SIDEBAR
+===================== -->
+
+
+<aside class="sidebar">
+
+
+<h1>
+🧠 Quiz Master
+</h1>
+
+
+<ul>
+
+
+<li>
+🏠 Dashboard
+</li>
+
+
+<li>
+📝 Questions
+</li>
+
+
+<li>
+👥 Users
+</li>
+
+
+<li>
+🏆 Results
+</li>
+
+
+<li>
+⚙ Settings
+</li>
+
+
+</ul>
+
+
+
+<button id="adminLogout">
+
+Logout
+
+</button>
+
+
+
+</aside>
+
+
+
+
+
+<!-- =====================
+     MAIN CONTENT
+===================== -->
+
+
+<main class="admin-main">
+
+
+
+<h1>
+⚙️ Admin Dashboard
+</h1>
+
+
+
+<!-- Dashboard Cards -->
+
+
+<div class="admin-cards">
+
+
+<div class="admin-card">
+
+<h2 id="totalQuestions">
+0
+</h2>
+
+<p>
+Total Questions
+</p>
+
+</div>
+
+
+
+<div class="admin-card">
+
+<h2>
+3
+</h2>
+
+<p>
+Categories
+</p>
+
+</div>
+
+
+
+<div class="admin-card">
+
+<h2>
+0
+</h2>
+
+<p>
+Total Users
+</p>
+
+</div>
+
+
+
+<div class="admin-card">
+
+<h2>
+0
+</h2>
+
+<p>
+Quiz Attempts
+</p>
+
+</div>
+
+
+</div>
+
+
+
+
+
+<!-- =====================
+     ADD QUESTION
+===================== -->
+
+
+<div class="question-box">
+
+
+<h2>
+➕ Add New Question
+</h2>
+
+
+
+<input 
+id="questionText"
+placeholder="Enter Question">
+
+
+
+
+
+<input 
+id="option1"
+placeholder="Option 1">
+
+
+
+<input 
+id="option2"
+placeholder="Option 2">
+
+
+
+<input 
+id="option3"
+placeholder="Option 3">
+
+
+
+<input 
+id="option4"
+placeholder="Option 4">
+
+
+
+
+
+<select id="correct">
+
+
+<option value="0">
+Option 1 Correct
+</option>
+
+
+<option value="1">
+Option 2 Correct
+</option>
+
+
+<option value="2">
+Option 3 Correct
+</option>
+
+
+<option value="3">
+Option 4 Correct
+</option>
+
+
+</select>
+
+
+
+
+
+<button id="addQuestion">
+
+Save Question
+
+</button>
+
+
+
+</div>
+
+
+
+
+
+
+
+<!-- =====================
+     QUESTION LIST
+===================== -->
+
+
+<div class="question-box">
+
+
+<h2>
+📋 Question Management
+</h2>
+
+
+
+
+<ul id="questionList">
+
+
+</ul>
+
+
+
+</div>
+
+
+
+
+
+
+</main>
+
+
+
+<script src="admin-dashboard.js"></script>
+
+
+</body>
+
+</html>
